@@ -25,25 +25,8 @@ const articleRoutes = require('./routes/article')
 // to use article routes
 app.use('/', articleRoutes)
 app.use('/article', articleRoutes)
+app.use('/author', articleRoutes)
 
-const con = require('./utils/db')
-
-// show articles by author
-app.get('/author/:author_id', (req, res) => {
-    let query = `select article.id, article.name, article.slug, article.image, article.body, article.published, author.name as author, author.id as author_id from article JOIN author ON article.author_id = author.id where author_id = "${req.params.author_id}";`
-    // let query = `SELECT * FROM article where slug = "${req.params.slug}"`
-    let articles = []
-    let author
-    con.query(query, (err, result) => {
-        if (err) throw err
-        articles = result
-        author = result[0]
-        res.render('author', {
-            articles: articles,
-            author: author
-        })
-    })
-})
 
 // app start point
 app.listen(3000, () => {
